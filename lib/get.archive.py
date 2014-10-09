@@ -43,7 +43,7 @@ li=[]
 for filename in lines:
     s=os.path.getsize(filename)
     if s > tapesize:
-        print  "single file size is bigger than tapesie\n it is not supported yet please split your file before archive"
+        print  "single file size is bigger than tapesize\n it is not supported yet please split your file before archive"
         print tapesize/(kb*kb*kb),' - ',s/(kb*kb*kb),' ',filename
         sys.exit(0)
 
