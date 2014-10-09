@@ -1,4 +1,5 @@
 al
 ==
 
-LTO Tape management utility collection
+LTO Tape library management utility collections.
+
