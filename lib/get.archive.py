@@ -42,6 +42,7 @@ tmppath=cfg.config.get(host,'TMP')
 reportfile=cfg.config.get(host,'report')
 lfs=cfg.config.get(host,'lfs')
 lstfile=cfg.config.get(host,'lstfile')
+PHASE2=cfg.config.getint(host,'PHASE2')
 
 kb=cfg.config.getfloat(host,'kb') #roundup the kb
 gb=kb*kb*kb
@@ -50,8 +51,12 @@ numbertarsplits=cfg.config.getfloat(host,'numbertarsplits')
 
 
 lstfile=cachepath+'/'+lstfile
-sys.stdout = Logger(cachepath+"/"+reportfile)
 print path, cachepath 
+if os.path.isfile(cachepath+"/"+reportfile):
+    print "the cache folder is not empty please clean it"
+    exit(1)
+
+sys.stdout = Logger(cachepath+"/"+reportfile)
 exec_cmd=lfs+' find '+path+' -type f >  ' + lstfile
 
 
@@ -116,7 +121,8 @@ def splitter(lstfile,splitsize,cph):
 
 splitter(lstfile,TSIZE, cachepath)
 
-
+if PHASE2 < 1:
+    exit(0)
 
 #1) split thefiles 
 #2) generate cache from splitted files
