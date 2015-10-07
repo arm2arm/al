@@ -1,34 +1,60 @@
+#!/usr/bin/python
 import os
 import io
 import sys
+import ConfigParser
+import socket
+
 #import multiprocessing
+
 class Logger(object):
     def __init__(self, filename="report.log"):
-        self.terminal = sys.stdout
-        self.log = open(filename, "a")
+      self.terminal = sys.stdout
+      self.log = open(filename, "a")
 
     def write(self, message):
-        self.terminal.write(message)
-        self.log.write(message)
+      self.terminal.write(message)
+      self.log.write(message)
 
+
+
+class Config(object):
+     def __init__(self,filename='~/.al.cfg'):
+        self.config = ConfigParser.ConfigParser()
+	self.config.read(os.path.expanduser(filename))   
 
 
 
 
 ar=str(sys.argv)
+if len(sys.argv) != 3 :
+   print "Wrong number of parameters."
+   print "Usage: "+sys.argv[0]+" path_to_backup path_to_cache "
+   exit(0)
+
 path=sys.argv[1]
 cachepath=sys.argv[2]
-lstfile=cachepath+'/file.all.lst'
-sys.stdout = Logger(cachepath+"/report.log")
-print path, cachepath
 
-exec_cmd='lfs find '+path+' -type f >  ' + lstfile
+cfg=Config();
 
+host=socket.gethostname().split('.')[0]
+tmppath=cfg.config.get(host,'TMP')
+reportfile=cfg.config.get(host,'report')
+lfs=cfg.config.get(host,'lfs')
+lstfile=cfg.config.get(host,'lstfile')
 
-kb=1000 #roundup the kb
+kb=cfg.config.getfloat(host,'kb') #roundup the kb
 gb=kb*kb*kb
-TSIZE=800*gb
-numbertarsplits=20.0
+TSIZE=cfg.config.getfloat(host,'TSIZE')*gb
+numbertarsplits=cfg.config.getfloat(host,'numbertarsplits')
+
+
+lstfile=cachepath+'/'+lstfile
+sys.stdout = Logger(cachepath+"/"+reportfile)
+print path, cachepath 
+exec_cmd=lfs+' find '+path+' -type f >  ' + lstfile
+
+
 ssize=0
 thefiles=[]
 thefilesize=[]
@@ -61,9 +87,9 @@ def splitter(lstfile,splitsize,cph):
     for filename in lines:
         if os.path.isfile(filename):
             s=os.path.getsize(filename)
-            if s > tapesize:
+            if s > tapesize and tapesize == TSIZE:
                 print  "single file size is bigger than tapesize\n it is not supported yet please split your file before archive"
-                print tapesize,' - ',s,' ',filename
+                print 'split size:',tapesize,' - filesize:',s,' ',filename
                 sys.exit(0)
     
         if s+ssum>tapesize:
