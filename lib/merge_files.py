@@ -4,21 +4,31 @@
 # The merge algorithm is following:
 # 1) merge neighbor pairs then select them as linear jobs
 # 2) if no pairs exit if some pairs go to 1)
-  
+#example:
+#   
+
 import networkx as nx
 import matplotlib.pyplot as plt
+import sys
+
+tarlist=[]
+for line in sys.stdin:
+   tarlist.append(line.rstrip()) 
+
+
 
 path='/lnew/BACKUP/temp/cache/splcache/000/new/splitted_'
-fname='tar --concatenate --file='+path+'%06d.tar  '+path+'%06d.tar &'
+fname='tar --concatenate --file=%s  %s &'
 
 col=[ "#00FFFF",  "#0000FF", "#FF00FF", "#008000", "#00FF00", "#800000", "#000080", "#808000", "#800080", "#FF0000", "#C0C0C0", "#008080", "#000000", "#FFFF00"]
 slist = []
-nsplits = 8 
+nsplits = len(tarlist) 
+
 G=nx.DiGraph()
 
 for i in range(0,nsplits):
     slist.append(i)
-print("some linear jobs:",slist)
+#print "#some linear jobs:"+slist
 
 G.add_nodes_from(slist)
 
@@ -34,14 +44,14 @@ while True:
        G.add_edge(a,b,weight=pas,label=pas,color=col[pas])
     if len(slist)==1:
        leftover=slist
-       print("left over job",leftover)
+       #print("left over job",leftover)
     if len(slist2):
-       print("Iteration:",pas)
-       print("Merging tasks:",slist2)
+       #print("Iteration:",pas)
+       #print("Merging tasks:",slist2)
        for i in slist2:
-           print fname%(i[0],i[1]),
-       print("wait")
-       print("#########")
+           print fname%(tarlist[i[0]],tarlist[i[1]]),
+       print "wait"
+#       print "#########"
     nojob=len(slist2)
     slist=leftover
     for i in slist2:
@@ -49,7 +59,7 @@ while True:
     if nojob<1 :
        break 
 
-print 'everything is merged to '+path+'%0.6d.tar'%(leftover[0])
+print '#everything is merged to '+path+'%0.6d.tar'%(leftover[0])
 
 pos=nx.spectral_layout(G) # positions for all nodes
 nx.draw_networkx_edges(G,pos,width=1)

@@ -27,9 +27,9 @@ class Config(object):
 
 
 ar=str(sys.argv)
-if len(sys.argv) != 3 :
+if len(sys.argv) != 3:
    print "Wrong number of parameters."
-   print "Usage: "+sys.argv[0]+" path_to_backup path_to_cache "
+   print "Usage: "+sys.argv[0]+" path_to_backup path_to_cache"
    exit(0)
 
 path=sys.argv[1]
@@ -57,8 +57,11 @@ if os.path.isfile(cachepath+"/"+reportfile):
     exit(1)
 
 sys.stdout = Logger(cachepath+"/"+reportfile)
+
 exec_cmd=lfs+' find '+path+' -type f >  ' + lstfile
 
+if os.path.isfile(path):
+   exec_cmd='cat  '+path +' >  ' + lstfile
 
 ssize=0
 thefiles=[]
@@ -91,7 +94,7 @@ def splitter(lstfile,splitsize,cph):
     li=[]
     for filename in lines:
         if os.path.isfile(filename):
-            s=os.path.getsize(filename)
+            s=os.stat(filename).st_size
             if s > tapesize and tapesize == TSIZE:
                 print  "single file size is bigger than tapesize\n it is not supported yet please split your file before archive"
                 print 'split size:',tapesize,' - filesize:',s,' ',filename
