@@ -12,7 +12,6 @@ Make parallel tar splits
 Install
 ========================
 
-copy config file to ```matplotlibrc```
-``` ~/.config/matplotlib/matplotlibrc```
+copy config file `matplotlibrc` to ` ~/.config/matplotlib/matplotlibrc`
 
 
