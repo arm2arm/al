@@ -89,6 +89,7 @@ def splitter(lstfile,splitsize,cph):
     print tapesize
     lines = [line.rstrip() for line in open(lstfile)]
     ssum=0
+    s=0
     tsum=0
     ntape=0
     li=[]
