@@ -21,4 +21,5 @@ for filename in lines:
 	   ssum+=s
 	   nfiles+=1
 
-print 'Total files-GB:',nfiles, ' - ',ssum/1024/1024/1024
+filename= os.path.basename(lstfile)
+print filename,':Nfiles - ',nfiles, ' - ',ssum/1024/1024/1024,' GB'
