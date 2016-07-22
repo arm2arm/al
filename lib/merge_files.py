@@ -18,7 +18,7 @@ for line in sys.stdin:
 
 
 path='/lnew/BACKUP/temp/cache/splcache/000/new/splitted_'
-fname='tar --concatenate --file=%s  %s &'
+fname='tar -b 2048 --concatenate --file=%s  %s &'
 
 col=[ "#00FFFF",  "#0000FF", "#FF00FF", "#008000", "#00FF00", "#800000", "#000080", "#808000", "#800080", "#FF0000", "#C0C0C0", "#008080", "#000000", "#FFFF00"]
 slist = []
