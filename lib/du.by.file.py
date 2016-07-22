@@ -7,7 +7,7 @@ import sys
 ar=str(sys.argv)
 if len(sys.argv) != 2:
    print "Wrong number of parameters."
-   print "Usage: "+sys.argv[0]+" path_to_backup path_to_cache"
+   print "Usage: "+sys.argv[0]+" path_to_backup_list_file "
    exit(0)
 
 
