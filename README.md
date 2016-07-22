@@ -15,3 +15,7 @@ Install
 copy config file `matplotlibrc` to ` ~/.config/matplotlib/matplotlibrc`
 
 
+Todo
+========================
+
+add a full al project
