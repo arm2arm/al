@@ -18,10 +18,12 @@ nfiles=0
 
 lines = [line.rstrip() for line in open(lstfile)]
 for filename in lines:
+    #print filename
     if os.path.isfile(filename):
 	   s=os.stat(filename).st_size
 	   ssum+=s
 	   nfiles+=1
+	   #print ssum
 
 filename= os.path.basename(lstfile)
-print filename,':Nfiles - ',nfiles, ' - ',ssum/1024/1024/1024,' GB'
+print filename,':Nfiles - ',nfiles, ' - ',ssum/1024.0/1024.0/1024.0,' GB'

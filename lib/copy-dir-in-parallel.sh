@@ -11,12 +11,12 @@ dst=$2
 name=$(echo "$src" | tr / -)
 dname=$(echo "$dst" | tr / -| tr : -)
 time=$(date +"%Y%m%d-%H%M")
-logdir=/lustre/tmp/var/logs/copy-dir-in-parallel
+logdir=/work1/tmp/var/logs/copy-dir-in-parallel
 logfile=$logdir/${time}${name}-${dname}.log
 folder=$(basename $src)
 
-workdir=/lustre/tmp/psync/parallel-sync-${time}-$folder
-jobqueuefile=/lustre/tmp/var/log/jobqueue.parallel.$folder
+workdir=/work1/tmp/psync/parallel-sync-${time}-$folder
+jobqueuefile=/work1/tmp/var/log/jobqueue.parallel.$folder
 mkdir -p $logdir
 mkdir -p $workdir
 
@@ -36,7 +36,7 @@ ndirs=$(wc -l ${dirs}  | cut -d ' ' -f1)
 
 echo "Found files:$nfiles in $ndirs folders."
 cd $workdir
-split -l 10000 -d -a 6 ${files} files_
+split -l 8 -d -a 6 ${files} files_
 truncate -s 0 $jobqueuefile
 
 for i in files_??????
@@ -50,3 +50,4 @@ echo '#queue is ready, please run, you cah edit line for remote servers as well:
 echo "cat $jobqueuefile | parallel -P4 --progress "
 cat $jobqueuefile | parallel   -P8  
 
+echo rsync -a --delete $src $dst
